@@ -1,0 +1,6 @@
+<h3>Outside: {{$ctrl.title}}</h3>
+<button ng-click="$ctrl.log(this)">LOG(this)</button>
+<button ng-click="$ctrl.show()">SHOW</button>
+<label>toggle:<input type="checkbox" ng-model="$ctrl.toggle"></label>
+<hr>
+<ng-simple-cmp data="$ctrl.title" ng-if="$ctrl.toggle"></ng-simple-cmp>

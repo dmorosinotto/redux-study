@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AngularJS Redux Study</title>
+
+    <script src="dist/angular.min.js"></script>
+    <script src="dist/angular-route.min.js"></script>
+    <!--<script src="dist/async-filter.js"></script>-->
+
+    <script src="dist/Rx.min.js"></script>
+    <script src="dist/redux.min.js"></script>
+    <script src="dist/redux-observable.min.js"></script>
+    <script src="dist/bundleRRTD.js"></script>
+    <script src="dist/rxjs-spy.min.umd.js"></script>
+<style>
+    h3 { color: red; font-size: 20pt }
+    small { color: gray; font-size: 15pt }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="#/prova">Prova</a>
+    <a href="#/async">Async</a>
+    <a href="#/ping">Ping+Fact</a>
+    <a href="#/count">Count</a>
+    <a href="#/todos/redux">Todos</a>
+    <a href="#/lookup/table">Lookup Table</a>
+</nav>
+<main>
+    <ng-view></ng-view>
+</main>
+
+<!-- ANGULAR APPLICATION BUNDLE IN ngApp NAMESPACE -->    
+<script src="dist/bundle_rxapp.js"></script>
+<!-- CREATE+REGISTER ANGULAR MODULE FROM NAMESPACE -->
+<script type="text/javascript">
+    (function(){
+        // REPLACE console.log IF NOT IN DEBUG + GLOBAL FUNCTION ngDebug() TO GET/SET DEBUG STATE --> console.log
+        window.ngDebug = (function (b) {
+            var _debug = !!b;
+            var _LOG = window.console.log;
+            var _NOLOG = function(){};
+            if (!_debug) window.console.log = _NOLOG;
+            return function(b) {
+                if (b===undefined) return _debug;
+                if (!b===_debug) {
+                    _debug = !!b;
+                    window.console.log = _debug ? _LOG : _NOLOG;
+                }
+            }
+        })( true ); //DEBUG MODE IS ENABLED IN Web.config
+
+        // REGISTER ALL Components, Directives, Controllers, Services, Filters, Configs DEFINED IN MyApp NAMESPACE (output in bundle.js by tsconfig.json)
+        angular.createModuleAndRegister(ngApp, "@ViewBag.ngModuleName", ["ngRoute","ngStore"]) //,"asyncFilter"
+    })();
+</script>
+<!-- DYNAMIC INJECTION OF VALUES READ FROM VIEWBAG INTO ANGULAR CONSTANTS --> 
+<script type="text/javascript">
+    (function(){
+        var app = angular.module("@ViewBag.ngModuleName");
+    
+        // INJECT SESSION CONSTANT TO ANGULAR CONTEXT
+        app.constant("Session", {
+            hubName: '@sessione.SIGNALR_HUB', //ocsFlightHub
+            baseAPI: "http://numbersapi.com"
+        });
+    
+    })();
+</script>
+<script type="text/javascript">
+    // BOOTSTRAP ANGULAR APP
+    angular.module("@ViewBag.ngModuleName").config(['$compileProvider', function ($compileProvider) {
+        // OPTIMIZE: remove debug objects read http://blog.thoughtram.io/angularjs/2014/12/22/exploring-angular-1.3-disabling-debug-info.html
+        $compileProvider.debugInfoEnabled(!ngDebug());
+    }]);
+    console.log("PRIMA DI angular.bootstrap");
+    angular.bootstrap(document, ["@ViewBag.ngModuleName"], {strictDi: !ngDebug()} );
+    console.log("DOPO DI angular.bootstrap");
+</script>
+</body>
+</html>

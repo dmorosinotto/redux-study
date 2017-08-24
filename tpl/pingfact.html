@@ -1,0 +1,14 @@
+<div>
+    <h3><small>Outer is pinging:</small> {{ $ctrl.isPinging }}</h3>
+    <button ng-click="$ctrl.ping()">Start PING</button>
+    <hr>
+    <button ng-click="$ctrl.fact()">FACT</button>
+    <span ng-style="{'color': ($ctrl.redIfErr$|async:this)}">
+        {{ $ctrl.fact$|async:this }}
+    </span>
+</div>
+<hr>
+<input type="checkbox" ng-model="show">toggle rx-*-cmp
+<rx-ping-cmp ng-if="!show"></rx-ping-cmp>
+<hr>
+<rx-counter ng-if="show" store="$ctrl.root$"></rx-counter>

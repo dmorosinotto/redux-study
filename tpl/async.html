@@ -1,0 +1,10 @@
+<h5>OBS: <ng-simple-cmp data="$ctrl.obs"></ng-simple-cmp></h5>
+<h4>OBS|async: <ng-simple-cmp data="$ctrl.obs|async:this"></ng-simple-cmp></h4>
+<i>CON ASYNC: {{$ctrl.obs|async:this}}</i>
+<button ng-click="$ctrl.pro()">PROMISE</button>
+<button ng-click="$ctrl.http()">$http</button>
+<hr>
+<input type="text" ng-model="n" value="5"> 
+<button ng-click="$ctrl.sub(n,this)">SUB(n)</button>
+Value={{$ctrl.val}} SENZA <code>|async</code> NON FUNZIONA <code>$digest</code>
+Bisogna premere: <button ng-click="this.$applyAsync()">UPDATE UI</button> !!!
